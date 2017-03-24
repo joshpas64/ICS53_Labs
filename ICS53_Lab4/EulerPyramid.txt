@@ -1,0 +1,98 @@
+### The language this was done in was Python 3.5.1
+
+class Pyramid(object):
+    def __init__(self,head):
+        self.head = [head]
+        self.body = [self.head]
+        self.last_row = self.head
+        self.rowCount = 1
+    def push_row(self,row):
+        if len(row) != (len(self.last_row) + 1):
+            return "Invalid"
+        else:
+            self.body.append(row)
+            self.last_row = row
+            self.rowCount += 1
+    def print_Pyr(self):
+        count = 1
+        for i in self.body:
+            rowString = "Row " + str(count) + ": "
+            for e in i:
+                rowString += str(e) + " "
+            print(rowString)
+            count += 1
+    def get_Head(self):
+        return self.head[0]
+    def get_lastRow(self):
+        return self.last_row
+    def get_size(self):
+        return self.rowCount
+    def search(self,row,col):
+        return self.body[row-1][col-1]
+    def getAdjacents(self,row,col):
+        adjacents = []
+        if self.rowCount == 1 or (row == self.rowCount):
+            return "Invalid input please try again"
+        if row == 1:
+            adjacents = self.body[1]
+            return adjacents
+        else:
+            adjacents.append(self.body[row][col-1])
+            adjacents.append(self.body[row][col])
+            return adjacents
+    def getMaxAdj(self,adjacents):
+        if(adjacents[0] > adjacents[1]):
+            return adjacents[0]
+        else:
+            return adjacents[1]
+    def findMaxAdj(self):
+        output = str(self.head[0]) + " "
+        if self.rowCount == 1:
+            return output
+        adjacents = self.getAdjacents(1,1)
+        newIndex = 0
+        if adjacents[0] <= adjacents[1]:
+            newIndex += 1
+        output += str(self.body[1][newIndex]) + " "
+        for i in range(2,len(self.body)):
+            adjacents = self.getAdjacents(i,newIndex + 1)
+            if adjacents[0] <= adjacents[1]:
+                newIndex += 1
+            output += str(self.body[i][newIndex]) + " "
+        return output
+    def sumMaxAdj(self):
+        maxSum = self.head[0]
+        if self.rowCount == 1:
+            return maxSum
+        newIndex = 0
+        for i in range(1,len(self.body)):
+            adjacents = self.getAdjacents(i,newIndex+1)
+            if adjacents[0] <= adjacents[1]:
+                newIndex += 1
+            maxSum += self.body[i][newIndex]
+        return maxSum
+pyr = Pyramid(3)
+pyr.push_row([7,4])
+pyr.push_row([2,4,6])
+pyr.push_row([8,5,9,3])
+pyr.print_Pyr()
+print(pyr.findMaxAdj())
+print(pyr.sumMaxAdj())
+pyr2 = Pyramid(75)
+pyr2.push_row([95,64])
+pyr2.push_row([17,47,82])
+pyr2.push_row([18,35,87,10])
+pyr2.push_row([20,4,82,47,65])
+pyr2.push_row([19,1,23,75,3,34])
+pyr2.push_row([88,2,77,73,7,63,67])
+pyr2.push_row([99,65,4,28,6,16,70,92])
+pyr2.push_row([41,41,26,56,83,40,80,70,33])
+pyr2.push_row([41,48,72,33,47,32,37,16,94,29])
+pyr2.push_row([53,71,44,65,25,43,91,52,97,51,14])
+pyr2.push_row([70,11,33,28,77,73,17,78,39,68,17,57])
+pyr2.push_row([91,71,52,38,17,14,91,43,58,50,27,29,48])
+pyr2.push_row([63,66,4,68,89,53,67,30,73,16,69,87,40,31])
+pyr2.push_row([4,62,98,27,23,9,70,98,73,93,38,53,60,4,23])
+pyr2.print_Pyr()
+print(pyr2.findMaxAdj())
+print(pyr2.sumMaxAdj())
